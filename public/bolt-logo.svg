@@ -1,0 +1,7 @@
+<svg width="360" height="360" viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="180" cy="180" r="180" fill="white"/>
+  <path d="M180 50C180 50 120 80 120 140C120 200 180 230 180 230C180 230 240 200 240 140C240 80 180 50 180 50Z" fill="black"/>
+  <path d="M180 310C180 310 240 280 240 220C240 160 180 130 180 130C180 130 120 160 120 220C120 280 180 310 180 310Z" fill="black"/>
+  <text x="180" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="black">POWERED BY BOLT.NEW</text>
+  <text x="180" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="black">MADE IN BOLT.NEW</text>
+</svg>

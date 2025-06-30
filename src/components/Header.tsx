@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Settings, LogOut, Zap } from 'lucide-react';
+import { User, Settings, LogOut } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 interface HeaderProps {
@@ -33,9 +33,13 @@ const Header: React.FC<HeaderProps> = ({ onSettingsClick }) => {
             href="https://bolt.new/" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center space-x-2 bg-yellow-200 px-3 py-1.5 rounded-lg border-2 border-black shadow-solid-sm hover:shadow-solid transition-all duration-200 hover:-translate-y-0.5"
+            className="flex items-center space-x-2 bg-white px-3 py-2 rounded-full border-2 border-black shadow-solid-sm hover:shadow-solid transition-all duration-200 hover:-translate-y-0.5"
           >
-            <Zap className="w-4 h-4 text-black" />
+            <img 
+              src="/bolt-logo.svg" 
+              alt="Built with Bolt" 
+              className="w-6 h-6"
+            />
             <span className="text-xs font-medium text-black">Built with Bolt</span>
           </a>
         </div>
