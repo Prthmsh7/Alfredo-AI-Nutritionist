@@ -54,18 +54,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl border-2 border-black shadow-solid-xl max-w-md w-full p-6 relative overflow-hidden">
-        {/* Background decorative image */}
-        <div className="absolute top-4 right-4 opacity-10">
-          <img 
-            src="/white_circle_360x360 copy.png" 
-            alt="" 
-            className="w-32 h-32 object-contain"
-          />
-        </div>
-
+      <div className="bg-white rounded-2xl border-2 border-black shadow-solid-xl max-w-md w-full p-6 relative">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6 relative z-10">
+        <div className="flex justify-between items-center mb-6">
           <div>
             <h2 className="text-2xl font-bold text-black">
               {isSignUp ? 'Create Account' : 'Welcome Back'}
@@ -82,24 +73,30 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* Logo section */}
-        <div className="flex justify-center mb-6 relative z-10">
+        {/* Prominent Logo Section */}
+        <div className="flex justify-center mb-8">
           <div className="relative">
             <img 
               src="/white_circle_360x360 copy.png" 
               alt="Alfredo Logo" 
-              className="w-20 h-20 object-contain"
+              className="w-24 h-24 object-contain drop-shadow-lg"
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-12 h-12 bg-primary-500 rounded-xl border-2 border-black shadow-solid-sm flex items-center justify-center">
-                <span className="text-white font-bold text-lg">A</span>
+              <div className="w-16 h-16 bg-primary-500 rounded-xl border-2 border-black shadow-solid-lg flex items-center justify-center">
+                <span className="text-white font-bold text-2xl">A</span>
               </div>
             </div>
           </div>
         </div>
 
+        {/* Branding Text */}
+        <div className="text-center mb-6">
+          <h3 className="text-xl font-bold text-black">Alfredo</h3>
+          <p className="text-gray-600 text-sm">AI Nutrition Assistant</p>
+        </div>
+
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {isSignUp && (
             <div>
               <label className="block text-sm font-medium text-black mb-2">
@@ -170,7 +167,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         </form>
 
         {/* Toggle */}
-        <div className="mt-6 text-center relative z-10">
+        <div className="mt-6 text-center">
           <p className="text-gray-600">
             {isSignUp ? 'Already have an account?' : "Don't have an account?"}
             <button
