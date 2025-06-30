@@ -61,7 +61,6 @@ function App() {
         daily_fat: 65,
         daily_fiber: 25,
         daily_sodium: 2300,
-        micronutrient_goals: {},
         is_active: true,
       });
 

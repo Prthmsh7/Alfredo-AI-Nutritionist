@@ -84,7 +84,7 @@ export interface NutritionGoal {
   daily_fat: number;
   daily_fiber: number;
   daily_sodium: number;
-  micronutrient_goals: Record<string, any>;
+  micronutrient_goals?: Record<string, any>;
   is_active: boolean;
   created_at: string;
 }

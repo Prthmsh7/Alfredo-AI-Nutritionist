@@ -47,7 +47,6 @@ export const useNutrition = (userId?: string) => {
       .from('nutrition_goals')
       .select('*')
       .eq('user_id', userId)
-      .eq('is_active', true)
       .single();
 
     if (error && error.code !== 'PGRST116') {

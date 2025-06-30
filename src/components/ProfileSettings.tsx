@@ -54,7 +54,6 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ userId }) => {
       .from('nutrition_goals')
       .select('*')
       .eq('user_id', userId)
-      .eq('is_active', true)
       .single();
 
     if (error && error.code !== 'PGRST116') {
