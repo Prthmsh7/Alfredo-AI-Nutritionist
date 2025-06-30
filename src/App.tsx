@@ -37,7 +37,7 @@ function App() {
         .eq('id', user!.id)
         .maybeSingle();
 
-      // Create user record if it doesn't exist
+      // Create user record if it doesn't exist and wait for completion
       if (!existingUser) {
         const { error: userError } = await supabase.from('users').insert({
           id: user!.id,
@@ -64,7 +64,7 @@ function App() {
         .eq('user_id', user!.id)
         .maybeSingle();
 
-      // Create profile if it doesn't exist
+      // Create profile if it doesn't exist and wait for completion
       if (!existingProfile) {
         const { error: profileError } = await supabase.from('profiles').insert({
           user_id: user!.id,
@@ -81,7 +81,19 @@ function App() {
         }
       }
 
-      // Now that user record exists, create nutrition goals
+      // Verify user exists before proceeding with dependent records
+      const { data: verifiedUser } = await supabase
+        .from('users')
+        .select('id')
+        .eq('id', user!.id)
+        .single();
+
+      if (!verifiedUser) {
+        console.error('User verification failed');
+        return;
+      }
+
+      // Now that user record is verified, create nutrition goals
       const { data: existingGoals } = await supabase
         .from('nutrition_goals')
         .select('id')
@@ -133,32 +145,41 @@ function App() {
         .select('id, name');
 
       if (ingredients) {
-        // Create sample pantry items
-        const pantryItemsToInsert = SAMPLE_PANTRY_ITEMS
-          .map(pantryItem => {
-            const ingredient = ingredients.find(ing => 
-              ing.name.toLowerCase() === pantryItem.ingredient_name.toLowerCase()
-            );
-            
-            if (ingredient) {
-              return {
-                user_id: user!.id,
-                ingredient_id: ingredient.id,
-                quantity: pantryItem.quantity,
-                unit: pantryItem.unit,
-                low_stock_threshold: 1,
-                is_low_stock: false,
-                last_updated: new Date().toISOString(),
-              };
-            }
-            return null;
-          })
-          .filter(Boolean);
+        // Check if pantry items already exist for this user
+        const { data: existingPantryItems } = await supabase
+          .from('pantry_items')
+          .select('id')
+          .eq('user_id', user!.id)
+          .limit(1);
 
-        if (pantryItemsToInsert.length > 0) {
-          const { error: pantryError } = await supabase.from('pantry_items').insert(pantryItemsToInsert);
-          if (pantryError) {
-            console.error('Error inserting pantry items:', pantryError);
+        // Only create sample pantry items if none exist
+        if (!existingPantryItems || existingPantryItems.length === 0) {
+          const pantryItemsToInsert = SAMPLE_PANTRY_ITEMS
+            .map(pantryItem => {
+              const ingredient = ingredients.find(ing => 
+                ing.name.toLowerCase() === pantryItem.ingredient_name.toLowerCase()
+              );
+              
+              if (ingredient) {
+                return {
+                  user_id: user!.id,
+                  ingredient_id: ingredient.id,
+                  quantity: pantryItem.quantity,
+                  unit: pantryItem.unit,
+                  low_stock_threshold: 1,
+                  is_low_stock: false,
+                  last_updated: new Date().toISOString(),
+                };
+              }
+              return null;
+            })
+            .filter(Boolean);
+
+          if (pantryItemsToInsert.length > 0) {
+            const { error: pantryError } = await supabase.from('pantry_items').insert(pantryItemsToInsert);
+            if (pantryError) {
+              console.error('Error inserting pantry items:', pantryError);
+            }
           }
         }
       }
