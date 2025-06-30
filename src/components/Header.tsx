@@ -27,10 +27,20 @@ const Header: React.FC<HeaderProps> = ({ onSettingsClick }) => {
           </div>
         </div>
 
-        {/* Made with Bolt.new badge */}
-        <div className="hidden sm:flex items-center space-x-2 bg-yellow-200 px-3 py-1.5 rounded-lg border-2 border-black shadow-solid-sm">
-          <Zap className="w-4 h-4 text-black" />
-          <span className="text-xs font-medium text-black">Made with Bolt.new</span>
+        {/* Built with Bolt badge */}
+        <div className="hidden sm:flex items-center">
+          <a 
+            href="https://bolt.new/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="transition-transform duration-200 hover:scale-105"
+          >
+            <img 
+              src="https://raw.githubusercontent.com/kickiniteasy/bolt-hackathon-badge/main/assets/bolt-badge.svg" 
+              alt="Built with Bolt" 
+              className="h-8 w-auto"
+            />
+          </a>
         </div>
 
         {/* User menu */}
