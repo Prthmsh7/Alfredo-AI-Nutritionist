@@ -47,9 +47,9 @@ export const useNutrition = (userId?: string) => {
       .from('nutrition_goals')
       .select('*')
       .eq('user_id', userId)
-      .single();
+      .maybeSingle();
 
-    if (error && error.code !== 'PGRST116') {
+    if (error) {
       console.error('Error fetching nutrition goals:', error);
     } else {
       setNutritionGoals(data);

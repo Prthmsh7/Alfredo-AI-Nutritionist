@@ -51,92 +51,102 @@ function App() {
         if (profileError && profileError.code !== '23505') {
           // Ignore duplicate key errors, but log other errors
           console.error('Error creating profile:', profileError);
+          return;
         }
       }
 
-      // Check if nutrition goals exist using maybeSingle
-      const { data: existingGoals } = await supabase
-        .from('nutrition_goals')
-        .select('id')
-        .eq('user_id', user!.id)
-        .maybeSingle();
+      // Add delay to ensure user is fully registered in Supabase's system
+      setTimeout(async () => {
+        try {
+          // Check if nutrition goals exist using maybeSingle
+          const { data: existingGoals } = await supabase
+            .from('nutrition_goals')
+            .select('id')
+            .eq('user_id', user!.id)
+            .maybeSingle();
 
-      // Create default nutrition goals if they don't exist
-      if (!existingGoals) {
-        const { error: goalsError } = await supabase.from('nutrition_goals').insert({
-          user_id: user!.id,
-          daily_calories: 2000,
-          daily_protein_g: 150,
-          daily_carbs_g: 250,
-          daily_fat_g: 65,
-          daily_fiber_g: 25,
-          daily_sodium_mg: 2300,
-          is_active: true,
-        });
+          // Create default nutrition goals if they don't exist
+          if (!existingGoals) {
+            const { error: goalsError } = await supabase.from('nutrition_goals').insert({
+              user_id: user!.id,
+              daily_calories: 2000,
+              daily_protein_g: 150,
+              daily_carbs_g: 250,
+              daily_fat_g: 65,
+              daily_fiber_g: 25,
+              daily_sodium_mg: 2300,
+              is_active: true,
+            });
 
-        if (goalsError) {
-          console.error('Error creating nutrition goals:', goalsError);
-        }
-      }
-
-      // Insert sample ingredients if they don't exist
-      const { data: existingIngredients } = await supabase
-        .from('ingredients')
-        .select('id')
-        .limit(1);
-
-      if (!existingIngredients || existingIngredients.length === 0) {
-        const ingredientsToInsert = SAMPLE_INGREDIENTS.map(ingredient => ({
-          ...ingredient,
-          fiber_per_100g: 0,
-          sugar_per_100g: 0,
-          sodium_per_100g: 0,
-          micronutrients: {},
-        }));
-
-        const { error: ingredientsError } = await supabase.from('ingredients').insert(ingredientsToInsert);
-        if (ingredientsError) {
-          console.error('Error inserting sample ingredients:', ingredientsError);
-        }
-      }
-
-      // Get ingredients for pantry setup
-      const { data: ingredients } = await supabase
-        .from('ingredients')
-        .select('id, name');
-
-      if (ingredients) {
-        // Create sample pantry items
-        const pantryItemsToInsert = SAMPLE_PANTRY_ITEMS
-          .map(pantryItem => {
-            const ingredient = ingredients.find(ing => 
-              ing.name.toLowerCase() === pantryItem.ingredient_name.toLowerCase()
-            );
-            
-            if (ingredient) {
-              return {
-                user_id: user!.id,
-                ingredient_id: ingredient.id,
-                quantity: pantryItem.quantity,
-                unit: pantryItem.unit,
-                low_stock_threshold: 1,
-                is_low_stock: false,
-                last_updated: new Date().toISOString(),
-              };
+            if (goalsError) {
+              console.error('Error creating nutrition goals:', goalsError);
             }
-            return null;
-          })
-          .filter(Boolean);
-
-        if (pantryItemsToInsert.length > 0) {
-          const { error: pantryError } = await supabase.from('pantry_items').insert(pantryItemsToInsert);
-          if (pantryError) {
-            console.error('Error inserting pantry items:', pantryError);
           }
-        }
-      }
 
-      setDataInitialized(true);
+          // Insert sample ingredients if they don't exist
+          const { data: existingIngredients } = await supabase
+            .from('ingredients')
+            .select('id')
+            .limit(1);
+
+          if (!existingIngredients || existingIngredients.length === 0) {
+            const ingredientsToInsert = SAMPLE_INGREDIENTS.map(ingredient => ({
+              ...ingredient,
+              fiber_per_100g: 0,
+              sugar_per_100g: 0,
+              sodium_per_100g: 0,
+              micronutrients: {},
+            }));
+
+            const { error: ingredientsError } = await supabase.from('ingredients').insert(ingredientsToInsert);
+            if (ingredientsError) {
+              console.error('Error inserting sample ingredients:', ingredientsError);
+            }
+          }
+
+          // Get ingredients for pantry setup
+          const { data: ingredients } = await supabase
+            .from('ingredients')
+            .select('id, name');
+
+          if (ingredients) {
+            // Create sample pantry items
+            const pantryItemsToInsert = SAMPLE_PANTRY_ITEMS
+              .map(pantryItem => {
+                const ingredient = ingredients.find(ing => 
+                  ing.name.toLowerCase() === pantryItem.ingredient_name.toLowerCase()
+                );
+                
+                if (ingredient) {
+                  return {
+                    user_id: user!.id,
+                    ingredient_id: ingredient.id,
+                    quantity: pantryItem.quantity,
+                    unit: pantryItem.unit,
+                    low_stock_threshold: 1,
+                    is_low_stock: false,
+                    last_updated: new Date().toISOString(),
+                  };
+                }
+                return null;
+              })
+              .filter(Boolean);
+
+            if (pantryItemsToInsert.length > 0) {
+              const { error: pantryError } = await supabase.from('pantry_items').insert(pantryItemsToInsert);
+              if (pantryError) {
+                console.error('Error inserting pantry items:', pantryError);
+              }
+            }
+          }
+
+          setDataInitialized(true);
+        } catch (error) {
+          console.error('Error in delayed initialization:', error);
+          setDataInitialized(true);
+        }
+      }, 1000); // 1 second delay to ensure user is fully registered
+
     } catch (error) {
       console.error('Error initializing user data:', error);
       setDataInitialized(true); // Set to true even on error to prevent infinite loops
