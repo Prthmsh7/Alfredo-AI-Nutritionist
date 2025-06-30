@@ -230,6 +230,15 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-100 font-inter">
+        {/* Fixed Top Left Logo - Always Visible */}
+        <div className="fixed top-4 left-4 z-50">
+          <img 
+            src="/white_circle_360x360 copy.png" 
+            alt="Alfredo Logo" 
+            className="w-16 h-16 object-contain drop-shadow-lg hover:scale-105 transition-transform duration-200"
+          />
+        </div>
+
         {user && (
           <>
             <Header onSettingsClick={() => setShowSettings(true)} />

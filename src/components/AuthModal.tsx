@@ -54,6 +54,15 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      {/* Fixed Top Left Logo - Also visible on auth modal */}
+      <div className="fixed top-4 left-4 z-50">
+        <img 
+          src="/white_circle_360x360 copy.png" 
+          alt="Alfredo Logo" 
+          className="w-16 h-16 object-contain drop-shadow-lg"
+        />
+      </div>
+
       <div className="bg-white rounded-2xl border-2 border-black shadow-solid-xl max-w-md w-full p-6 relative">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
@@ -73,24 +82,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* Prominent Logo Section */}
-        <div className="flex justify-center mb-8">
-          <div className="relative">
-            <img 
-              src="/white_circle_360x360 copy.png" 
-              alt="Alfredo Logo" 
-              className="w-24 h-24 object-contain drop-shadow-lg"
-            />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-16 h-16 bg-primary-500 rounded-xl border-2 border-black shadow-solid-lg flex items-center justify-center">
-                <span className="text-white font-bold text-2xl">A</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Branding Text */}
+        {/* Branding Section */}
         <div className="text-center mb-6">
+          <div className="w-16 h-16 bg-primary-500 rounded-xl border-2 border-black shadow-solid-lg flex items-center justify-center mx-auto mb-3">
+            <span className="text-white font-bold text-2xl">A</span>
+          </div>
           <h3 className="text-xl font-bold text-black">Alfredo</h3>
           <p className="text-gray-600 text-sm">AI Nutrition Assistant</p>
         </div>

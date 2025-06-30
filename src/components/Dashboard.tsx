@@ -48,34 +48,17 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onVoiceClick }) => {
 
   return (
     <div className="max-w-6xl mx-auto p-4 space-y-6">
-      {/* Welcome Section with Prominent Logo */}
+      {/* Welcome Section */}
       <div className="bg-white rounded-2xl border-2 border-black shadow-solid-lg p-6">
         <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between space-y-6 lg:space-y-0">
-          {/* Logo and Welcome Text */}
-          <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-4 lg:space-y-0 lg:space-x-6">
-            {/* Prominent White Circle Logo */}
-            <div className="relative flex-shrink-0">
-              <img 
-                src="/white_circle_360x360 copy.png" 
-                alt="Alfredo Logo" 
-                className="w-20 h-20 lg:w-24 lg:h-24 object-contain drop-shadow-lg"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-14 h-14 lg:w-16 lg:h-16 bg-primary-500 rounded-xl border-2 border-black shadow-solid-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-xl lg:text-2xl">A</span>
-                </div>
-              </div>
-            </div>
-            
-            {/* Welcome Text */}
-            <div className="text-center lg:text-left">
-              <h1 className="text-2xl lg:text-3xl font-bold text-black mb-2">
-                Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 17 ? 'Afternoon' : 'Evening'}! 👋
-              </h1>
-              <p className="text-gray-600 text-base lg:text-lg">
-                Ready to track your nutrition? Ask me anything about your meals, recipes, or pantry.
-              </p>
-            </div>
+          {/* Welcome Text */}
+          <div className="text-center lg:text-left">
+            <h1 className="text-2xl lg:text-3xl font-bold text-black mb-2">
+              Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 17 ? 'Afternoon' : 'Evening'}! 👋
+            </h1>
+            <p className="text-gray-600 text-base lg:text-lg">
+              Ready to track your nutrition? Ask me anything about your meals, recipes, or pantry.
+            </p>
           </div>
           
           {/* Voice Assistant Button */}
@@ -204,24 +187,9 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onVoiceClick }) => {
         </div>
       </div>
 
-      {/* Quick Actions with Logo Accent */}
+      {/* Quick Actions */}
       <div className="bg-white rounded-2xl border-2 border-black shadow-solid-lg p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-black">Quick Actions</h2>
-          {/* Small accent logo */}
-          <div className="relative">
-            <img 
-              src="/white_circle_360x360 copy.png" 
-              alt="" 
-              className="w-8 h-8 object-contain opacity-30"
-            />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-6 h-6 bg-primary-500 rounded-lg border border-black flex items-center justify-center">
-                <span className="text-white font-bold text-xs">A</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <h2 className="text-xl font-bold text-black mb-4">Quick Actions</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <button
