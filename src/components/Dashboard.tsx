@@ -18,9 +18,9 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onVoiceClick }) => {
   // Default goals if none set
   const goals = nutritionGoals || {
     daily_calories: 2000,
-    daily_protein: 150,
-    daily_carbs: 250,
-    daily_fat: 65,
+    daily_protein_g: 150,
+    daily_carbs_g: 250,
+    daily_fat_g: 65,
   };
 
   const getProgressPercentage = (current: number, target: number) => {
@@ -47,23 +47,53 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onVoiceClick }) => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4 space-y-6">
+    <div className="max-w-6xl mx-auto p-4 space-y-6 relative">
+      {/* Background decorative elements */}
+      <div className="fixed top-20 right-10 opacity-5 pointer-events-none z-0">
+        <img 
+          src="/white_circle_360x360 copy.png" 
+          alt="" 
+          className="w-64 h-64 object-contain"
+        />
+      </div>
+      <div className="fixed bottom-20 left-10 opacity-5 pointer-events-none z-0">
+        <img 
+          src="/white_circle_360x360 copy.png" 
+          alt="" 
+          className="w-48 h-48 object-contain"
+        />
+      </div>
+
       {/* Welcome Section */}
-      <div className="bg-white rounded-2xl border-2 border-black shadow-solid-lg p-6">
+      <div className="bg-white rounded-2xl border-2 border-black shadow-solid-lg p-6 relative z-10">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between space-y-4 lg:space-y-0">
-          <div>
-            <h1 className="text-3xl font-bold text-black mb-2">
-              Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 17 ? 'Afternoon' : 'Evening'}! 👋
-            </h1>
-            <p className="text-gray-600 text-lg">
-              Ready to track your nutrition? Ask me anything about your meals, recipes, or pantry.
-            </p>
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <img 
+                src="/white_circle_360x360 copy.png" 
+                alt="Alfredo" 
+                className="w-16 h-16 object-contain opacity-20"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-12 h-12 bg-primary-500 rounded-xl border-2 border-black shadow-solid-sm flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">A</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-black mb-2">
+                Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 17 ? 'Afternoon' : 'Evening'}! 👋
+              </h1>
+              <p className="text-gray-600 text-lg">
+                Ready to track your nutrition? Ask me anything about your meals, recipes, or pantry.
+              </p>
+            </div>
           </div>
           
           {/* Voice Assistant Button */}
           <button
             onClick={onVoiceClick}
-            className="bg-primary-500 text-white px-8 py-4 rounded-2xl border-2 border-black shadow-solid-lg hover:shadow-solid-xl transition-all duration-200 hover:-translate-y-1 flex items-center space-x-3 text-lg font-semibold group"
+            className="bg-primary-500 text-white px-8 py-4 rounded-2xl border-2 border-black shadow-solid-lg hover:shadow-solid-xl transition-all duration-200 hover:-translate-y-1 flex items-center space-x-3 text-lg font-semibold group relative z-10"
           >
             <Mic className="w-6 h-6 group-hover:animate-bounce-gentle" />
             <span>Ask Alfredo</span>
@@ -72,12 +102,12 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onVoiceClick }) => {
       </div>
 
       {/* Nutrition Progress Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
         {[
           { label: 'Calories', current: todaysNutrition.calories, target: goals.daily_calories, color: 'bg-blue-100 border-blue-500', icon: <Zap className="w-5 h-5 text-blue-600" /> },
-          { label: 'Protein', current: todaysNutrition.protein, target: goals.daily_protein, color: 'bg-green-100 border-green-500', icon: <TrendingUp className="w-5 h-5 text-green-600" /> },
-          { label: 'Carbs', current: todaysNutrition.carbs, target: goals.daily_carbs, color: 'bg-yellow-100 border-yellow-500', icon: <Target className="w-5 h-5 text-yellow-600" /> },
-          { label: 'Fat', current: todaysNutrition.fat, target: goals.daily_fat, color: 'bg-purple-100 border-purple-500', icon: <Clock className="w-5 h-5 text-purple-600" /> },
+          { label: 'Protein', current: todaysNutrition.protein, target: goals.daily_protein_g, color: 'bg-green-100 border-green-500', icon: <TrendingUp className="w-5 h-5 text-green-600" /> },
+          { label: 'Carbs', current: todaysNutrition.carbs, target: goals.daily_carbs_g, color: 'bg-yellow-100 border-yellow-500', icon: <Target className="w-5 h-5 text-yellow-600" /> },
+          { label: 'Fat', current: todaysNutrition.fat, target: goals.daily_fat_g, color: 'bg-purple-100 border-purple-500', icon: <Clock className="w-5 h-5 text-purple-600" /> },
         ].map((item, index) => (
           <div key={index} className={`${item.color} rounded-2xl border-2 shadow-solid-sm p-4`}>
             <div className="flex items-center justify-between mb-3">
@@ -108,7 +138,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onVoiceClick }) => {
       </div>
 
       {/* Today's Activity & Pantry Status */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative z-10">
         {/* Recent Meals */}
         <div className="bg-white rounded-2xl border-2 border-black shadow-solid-lg p-6">
           <h2 className="text-xl font-bold text-black mb-4 flex items-center">
@@ -187,7 +217,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onVoiceClick }) => {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-2xl border-2 border-black shadow-solid-lg p-6">
+      <div className="bg-white rounded-2xl border-2 border-black shadow-solid-lg p-6 relative z-10">
         <h2 className="text-xl font-bold text-black mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <button
