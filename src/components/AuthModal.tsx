@@ -54,8 +54,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      {/* Fixed Top Left Logo - Also visible on auth modal */}
-      <div className="fixed top-4 left-4 z-50">
+      {/* Fixed Top Left Logo - ALSO ON TOP OF AUTH MODAL */}
+      <div className="fixed top-4 left-4 z-[9999]">
         <img 
           src="/white_circle_360x360 copy.png" 
           alt="Alfredo Logo" 

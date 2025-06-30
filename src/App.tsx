@@ -230,8 +230,8 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-100 font-inter">
-        {/* Fixed Top Left Logo - Always Visible */}
-        <div className="fixed top-4 left-4 z-50">
+        {/* Fixed Top Left Logo - ALWAYS ON TOP OF EVERYTHING */}
+        <div className="fixed top-4 left-4 z-[9999]">
           <img 
             src="/white_circle_360x360 copy.png" 
             alt="Alfredo Logo" 
