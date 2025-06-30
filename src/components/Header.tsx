@@ -33,13 +33,10 @@ const Header: React.FC<HeaderProps> = ({ onSettingsClick }) => {
             href="https://bolt.new/" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="transition-transform duration-200 hover:scale-105"
+            className="flex items-center space-x-2 bg-yellow-200 px-3 py-1.5 rounded-lg border-2 border-black shadow-solid-sm hover:shadow-solid transition-all duration-200 hover:-translate-y-0.5"
           >
-            <img 
-              src="https://raw.githubusercontent.com/kickiniteasy/bolt-hackathon-badge/main/assets/bolt-badge.svg" 
-              alt="Built with Bolt" 
-              className="h-8 w-auto"
-            />
+            <Zap className="w-4 h-4 text-black" />
+            <span className="text-xs font-medium text-black">Built with Bolt</span>
           </a>
         </div>
 
