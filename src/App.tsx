@@ -230,13 +230,20 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-100 font-inter">
-        {/* Fixed Top Left Logo - ALWAYS ON TOP OF EVERYTHING */}
+        {/* Fixed Top Left Logo - ALWAYS ON TOP OF EVERYTHING & CLICKABLE */}
         <div className="fixed top-4 left-4 z-[9999]">
-          <img 
-            src="/white_circle_360x360 copy.png" 
-            alt="Alfredo Logo" 
-            className="w-16 h-16 object-contain drop-shadow-lg hover:scale-105 transition-transform duration-200"
-          />
+          <a 
+            href="https://bolt.new/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block"
+          >
+            <img 
+              src="/white_circle_360x360 copy.png" 
+              alt="Built with Bolt.new - Click to visit" 
+              className="w-16 h-16 object-contain drop-shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer"
+            />
+          </a>
         </div>
 
         {user && (

@@ -54,13 +54,20 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      {/* Fixed Top Left Logo - ALSO ON TOP OF AUTH MODAL */}
+      {/* Fixed Top Left Logo - ALSO ON TOP OF AUTH MODAL & CLICKABLE */}
       <div className="fixed top-4 left-4 z-[9999]">
-        <img 
-          src="/white_circle_360x360 copy.png" 
-          alt="Alfredo Logo" 
-          className="w-16 h-16 object-contain drop-shadow-lg"
-        />
+        <a 
+          href="https://bolt.new/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="block"
+        >
+          <img 
+            src="/white_circle_360x360 copy.png" 
+            alt="Built with Bolt.new - Click to visit" 
+            className="w-16 h-16 object-contain drop-shadow-lg hover:scale-110 transition-transform duration-200 cursor-pointer"
+          />
+        </a>
       </div>
 
       <div className="bg-white rounded-2xl border-2 border-black shadow-solid-xl max-w-md w-full p-6 relative">
