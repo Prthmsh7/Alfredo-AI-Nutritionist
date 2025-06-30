@@ -30,39 +30,54 @@ function App() {
 
   const initializeUserData = async () => {
     try {
-      // Check if user already has data
+      // Check if user already has data using maybeSingle to avoid errors
       const { data: existingProfile } = await supabase
         .from('profiles')
         .select('id')
         .eq('user_id', user!.id)
-        .single();
+        .maybeSingle();
 
-      if (existingProfile) {
-        setDataInitialized(true);
-        return;
+      // Create profile if it doesn't exist
+      if (!existingProfile) {
+        const { error: profileError } = await supabase.from('profiles').insert({
+          user_id: user!.id,
+          email: user!.email!,
+          full_name: user!.user_metadata?.full_name || '',
+          subscription_tier: 'free',
+          voice_settings: {},
+          nutrition_preferences: {},
+        });
+
+        if (profileError && profileError.code !== '23505') {
+          // Ignore duplicate key errors, but log other errors
+          console.error('Error creating profile:', profileError);
+        }
       }
 
-      // Create profile
-      await supabase.from('profiles').insert({
-        user_id: user!.id,
-        email: user!.email!,
-        full_name: user!.user_metadata?.full_name || '',
-        subscription_tier: 'free',
-        voice_settings: {},
-        nutrition_preferences: {},
-      });
+      // Check if nutrition goals exist using maybeSingle
+      const { data: existingGoals } = await supabase
+        .from('nutrition_goals')
+        .select('id')
+        .eq('user_id', user!.id)
+        .maybeSingle();
 
-      // Create default nutrition goals
-      await supabase.from('nutrition_goals').insert({
-        user_id: user!.id,
-        daily_calories: 2000,
-        daily_protein: 150,
-        daily_carbs: 250,
-        daily_fat: 65,
-        daily_fiber: 25,
-        daily_sodium: 2300,
-        is_active: true,
-      });
+      // Create default nutrition goals if they don't exist
+      if (!existingGoals) {
+        const { error: goalsError } = await supabase.from('nutrition_goals').insert({
+          user_id: user!.id,
+          daily_calories: 2000,
+          daily_protein_g: 150,
+          daily_carbs_g: 250,
+          daily_fat_g: 65,
+          daily_fiber_g: 25,
+          daily_sodium_mg: 2300,
+          is_active: true,
+        });
+
+        if (goalsError) {
+          console.error('Error creating nutrition goals:', goalsError);
+        }
+      }
 
       // Insert sample ingredients if they don't exist
       const { data: existingIngredients } = await supabase
@@ -79,7 +94,10 @@ function App() {
           micronutrients: {},
         }));
 
-        await supabase.from('ingredients').insert(ingredientsToInsert);
+        const { error: ingredientsError } = await supabase.from('ingredients').insert(ingredientsToInsert);
+        if (ingredientsError) {
+          console.error('Error inserting sample ingredients:', ingredientsError);
+        }
       }
 
       // Get ingredients for pantry setup
@@ -111,13 +129,17 @@ function App() {
           .filter(Boolean);
 
         if (pantryItemsToInsert.length > 0) {
-          await supabase.from('pantry_items').insert(pantryItemsToInsert);
+          const { error: pantryError } = await supabase.from('pantry_items').insert(pantryItemsToInsert);
+          if (pantryError) {
+            console.error('Error inserting pantry items:', pantryError);
+          }
         }
       }
 
       setDataInitialized(true);
     } catch (error) {
       console.error('Error initializing user data:', error);
+      setDataInitialized(true); // Set to true even on error to prevent infinite loops
     }
   };
 

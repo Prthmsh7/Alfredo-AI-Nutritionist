@@ -36,9 +36,9 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ userId }) => {
       .from('profiles')
       .select('*')
       .eq('user_id', userId)
-      .single();
+      .maybeSingle();
 
-    if (error && error.code !== 'PGRST116') {
+    if (error) {
       console.error('Error fetching profile:', error);
     } else if (data) {
       setProfile(data);
@@ -54,20 +54,20 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ userId }) => {
       .from('nutrition_goals')
       .select('*')
       .eq('user_id', userId)
-      .single();
+      .maybeSingle();
 
-    if (error && error.code !== 'PGRST116') {
+    if (error) {
       console.error('Error fetching nutrition goals:', error);
     } else if (data) {
       setNutritionGoals(data);
       setFormData(prev => ({
         ...prev,
-        daily_calories: data.daily_calories,
-        daily_protein: data.daily_protein,
-        daily_carbs: data.daily_carbs,
-        daily_fat: data.daily_fat,
-        daily_fiber: data.daily_fiber,
-        daily_sodium: data.daily_sodium,
+        daily_calories: data.daily_calories || 2000,
+        daily_protein: data.daily_protein_g || 150,
+        daily_carbs: data.daily_carbs_g || 250,
+        daily_fat: data.daily_fat_g || 65,
+        daily_fiber: data.daily_fiber_g || 25,
+        daily_sodium: data.daily_sodium_mg || 2300,
       }));
     }
     setLoading(false);
@@ -78,15 +78,19 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ userId }) => {
     try {
       // Update or create profile
       if (profile) {
-        await supabase
+        const { error } = await supabase
           .from('profiles')
           .update({
             full_name: formData.full_name,
             updated_at: new Date().toISOString(),
           })
           .eq('user_id', userId);
+
+        if (error) {
+          console.error('Error updating profile:', error);
+        }
       } else {
-        await supabase
+        const { error } = await supabase
           .from('profiles')
           .insert({
             user_id: userId,
@@ -96,34 +100,47 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ userId }) => {
             voice_settings: {},
             nutrition_preferences: {},
           });
+
+        if (error && error.code !== '23505') {
+          console.error('Error creating profile:', error);
+        }
       }
 
       // Update or create nutrition goals
       if (nutritionGoals) {
-        await supabase
+        const { error } = await supabase
           .from('nutrition_goals')
           .update({
             daily_calories: formData.daily_calories,
-            daily_protein: formData.daily_protein,
-            daily_carbs: formData.daily_carbs,
-            daily_fat: formData.daily_fat,
-            daily_fiber: formData.daily_fiber,
-            daily_sodium: formData.daily_sodium,
+            daily_protein_g: formData.daily_protein,
+            daily_carbs_g: formData.daily_carbs,
+            daily_fat_g: formData.daily_fat,
+            daily_fiber_g: formData.daily_fiber,
+            daily_sodium_mg: formData.daily_sodium,
+            updated_at: new Date().toISOString(),
           })
           .eq('id', nutritionGoals.id);
+
+        if (error) {
+          console.error('Error updating nutrition goals:', error);
+        }
       } else {
-        await supabase
+        const { error } = await supabase
           .from('nutrition_goals')
           .insert({
             user_id: userId,
             daily_calories: formData.daily_calories,
-            daily_protein: formData.daily_protein,
-            daily_carbs: formData.daily_carbs,
-            daily_fat: formData.daily_fat,
-            daily_fiber: formData.daily_fiber,
-            daily_sodium: formData.daily_sodium,
+            daily_protein_g: formData.daily_protein,
+            daily_carbs_g: formData.daily_carbs,
+            daily_fat_g: formData.daily_fat,
+            daily_fiber_g: formData.daily_fiber,
+            daily_sodium_mg: formData.daily_sodium,
             is_active: true,
           });
+
+        if (error) {
+          console.error('Error creating nutrition goals:', error);
+        }
       }
 
       // Refresh data
